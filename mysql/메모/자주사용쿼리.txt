@@ -1,0 +1,8 @@
+
+========================
+* 테이블 공통 필드 ddl
+
+ALTER TABLE tb_library ADD COLUMN `regdate` DATETIME NULL DEFAULT NULL COMMENT '등록일시';
+ALTER TABLE tb_library ADD COLUMN `reguser` VARCHAR(100) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci'  ;
+ALTER TABLE tb_library ADD COLUMN `moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시'  ;
+ALTER TABLE tb_library ADD COLUMN `moduser` VARCHAR(100) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci'  ;

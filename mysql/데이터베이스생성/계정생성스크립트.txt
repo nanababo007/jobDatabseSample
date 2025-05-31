@@ -1,0 +1,9 @@
+
+===============================
+* mysql 데이터베이스 및 계정 생성 스크립트
+
+create database 디비이름 character set UTF8;
+
+create user 디비계정이름@localhost identified BY '비밀번호'; 
+
+grant all privileges on 디비계정이름.* to 디비이름@localhost;

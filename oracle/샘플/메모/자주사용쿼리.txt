@@ -1,0 +1,33 @@
+========================
+* 테이블 생성 DDL 샘플
+
+CREATE TABLE 게시판 (
+    게시글_ID NUMBER PRIMARY KEY,
+    제목 VARCHAR2(255) NOT NULL,
+    내용 CLOB NOT NULL,
+    작성자 VARCHAR2(100) NOT NULL,
+    작성일 DATE DEFAULT SYSDATE,
+    조회수 NUMBER DEFAULT 0
+);
+
+========================
+* 테이블 공통 필드 ddl
+
+ALTER TABLE 테이블이름 ADD (
+    REGDATE DATE,
+    REGUSER VARCHAR2(50),
+    MODDATE DATE,
+    MODUSER VARCHAR2(50)
+);
+
+COMMENT ON COLUMN 테이블이름.REGDATE IS '등록일시';
+COMMENT ON COLUMN 테이블이름.REGUSER IS '등록자';
+COMMENT ON COLUMN 테이블이름.MODDATE IS '수정일시';
+COMMENT ON COLUMN 테이블이름.MODUSER IS '수정자';
+
+========================
+* 테이블 필드 주석 설정 ddl
+
+COMMENT ON TABLE 테이블이름 IS '테이블 주석 내용';
+COMMENT ON COLUMN 테이블이름.컬럼이름 IS '컬럼 주석 내용';
+
