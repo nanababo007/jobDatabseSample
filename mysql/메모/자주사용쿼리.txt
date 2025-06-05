@@ -6,3 +6,8 @@ ALTER TABLE tb_library ADD COLUMN `regdate` DATETIME NULL DEFAULT NULL COMMENT '
 ALTER TABLE tb_library ADD COLUMN `reguser` VARCHAR(100) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci'  ;
 ALTER TABLE tb_library ADD COLUMN `moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시'  ;
 ALTER TABLE tb_library ADD COLUMN `moduser` VARCHAR(100) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci'  ;
+
+ALTER TABLE tb_library ADD COLUMN `regdate` DATETIME NULL DEFAULT NULL COMMENT 'regist datetime';
+ALTER TABLE tb_library ADD COLUMN `reguser` VARCHAR(100) NULL DEFAULT NULL COMMENT 'regist user' COLLATE 'utf8mb4_general_ci'  ;
+ALTER TABLE tb_library ADD COLUMN `moddate` DATETIME NULL DEFAULT NULL COMMENT 'modified datetime'  ;
+ALTER TABLE tb_library ADD COLUMN `moduser` VARCHAR(100) NULL DEFAULT NULL COMMENT 'modified user' COLLATE 'utf8mb4_general_ci'  ;
