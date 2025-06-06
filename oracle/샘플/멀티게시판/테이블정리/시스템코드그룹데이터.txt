@@ -1,0 +1,1 @@
+BOARD_KIND_CODE					게시판 종류 코드	게시판 종류 코드	0	N

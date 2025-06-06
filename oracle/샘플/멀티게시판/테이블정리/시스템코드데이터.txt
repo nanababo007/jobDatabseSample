@@ -1,0 +1,7 @@
+BOARD_KIND_CODE					01	일반 게시판	일반 게시판		N
+BOARD_KIND_CODE					02	FAQ 게시판	FAQ 게시판		N
+BOARD_KIND_CODE					03	계층형 게시판	계층형 게시판		N
+BOARD_KIND_CODE					04	답변형 게시판	답변형 게시판		N
+BOARD_KIND_CODE					05	이미지 게시판	이미지 게시판		N
+BOARD_KIND_CODE					06	블로그형 게시판	블로그형 게시판		N
+
