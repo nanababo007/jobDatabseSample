@@ -22,3 +22,8 @@ grant connect, resource to JobSampleUser;
 grant unlimited tablespace to JobSampleUser;
 --모든 테이블스페이스에 할당량(QUOTA)을 줄 수 있는 권한이다.
 
+ALTER DATABASE DATAFILE 'D:/databaseData/oracle/JobSample.dbf' AUTOEXTEND ON;
+commit;
+
+ALTER DATABASE DATAFILE 'D:/databaseData/oracle/JobSample.dbf' RESIZE 300M;
+COMMIT;
