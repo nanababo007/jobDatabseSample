@@ -1,0 +1,532 @@
+
+CREATE TABLE [dbo].[TB_BOARD](
+    BOARD_NO BIGINT, 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	BOARD_NAME VARCHAR(500), 
+	BOARD_KIND_CODE VARCHAR(50), 
+	BOARD_REPLY_FUNC_YN VARCHAR(1) DEFAULT 'N', 
+	BOARD_ORD INT DEFAULT 0, 
+	DEL_YN VARCHAR(1) DEFAULT 'N'
+) 
+GO
+
+CREATE TABLE [dbo].TB_BOARD_ARTICLE 
+   (	BOARD_ARTICLE_NO BIGINT, 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	BOARD_ARTICLE_TITLE VARCHAR(500), 
+	BOARD_NO BIGINT DEFAULT 0, 
+	BOARD_ARTICLE_VIEW_CNT BIGINT DEFAULT 0, 
+	BOARD_ARTICLE_CONTENT TEXT, 
+	BOARD_ARTICLE_REPLY_CONTENT TEXT, 
+	DEL_YN VARCHAR(1) DEFAULT 'N', 
+	NOTICE_YN VARCHAR(1) DEFAULT 'N'
+)
+GO
+
+CREATE TABLE [dbo].TB_BOARD_ARTICLE_FILE 
+   (	BOARD_ARTICLE_FILE_NO BIGINT, 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	BOARD_ARTICLE_FILE_NAME VARCHAR(500), 
+	BOARD_ARTICLE_FILE_SAVE_NAME VARCHAR(500), 
+	BOARD_ARTICLE_FILE_SIZE BIGINT DEFAULT 0, 
+	BOARD_ARTICLE_FILE_EXT VARCHAR(200), 
+	BOARD_ARTICLE_FILE_SAVE_PATH VARCHAR(2000), 
+	BOARD_ARTICLE_FILE_WEB_PATH VARCHAR(2000), 
+	BOARD_ARTICLE_NO BIGINT DEFAULT 0, 
+	BOARD_ARTICLE_FILE_ORD INT DEFAULT 0, 
+	BOARD_NO BIGINT DEFAULT 0, 
+	DEL_YN VARCHAR(1) DEFAULT 'N', 
+	REPR_YN VARCHAR(1) DEFAULT 'N'
+    )
+GO
+
+CREATE TABLE [dbo].TB_BOARD_ARTICLE_REPLY 
+   (	BOARD_ARTICLE_REPLY_NO BIGINT, 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	BOARD_ARTICLE_NO BIGINT, 
+	BOARD_ARTICLE_REPLY_TITLE VARCHAR(500), 
+	BOARD_ARTICLE_REPLY_CONTENT TEXT, 
+	P_BOARD_ARTICLE_REPLY_NO BIGINT, 
+	BOARD_ARTICLE_REPLY_DEPTH INT, 
+	BOARD_NO BIGINT DEFAULT 0, 
+	DEL_YN VARCHAR(1) DEFAULT 'N', 
+	NOTICE_YN VARCHAR(1) DEFAULT 'N'
+    )
+GO
+
+CREATE TABLE [dbo].TB_BOARD_ARTICLE_TAG 
+   (	BOARD_ARTICLE_TAG_NO BIGINT, 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	BOARD_ARTICLE_TAG_NAME VARCHAR(200), 
+	BOARD_ARTICLE_TAG_ORD BIGINT, 
+	BOARD_ARTICLE_NO BIGINT DEFAULT 0, 
+	BOARD_NO BIGINT DEFAULT 0, 
+	DEL_YN VARCHAR(1) DEFAULT 'N'
+    )
+GO
+
+CREATE TABLE [dbo].TB_SYS_CODE 
+   (	SYS_CODE_GROUP VARCHAR(200), 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	SYS_CODE VARCHAR(50), 
+	SYS_CODE_NAME VARCHAR(200), 
+	SYS_CODE_DESC VARCHAR(500), 
+	SYS_CODE_ORD INT, 
+	DEL_YN VARCHAR(1) DEFAULT 'N'
+   )
+GO
+
+CREATE TABLE [dbo].TB_SYS_CODE_GROUP 
+   (	SYS_CODE_GROUP VARCHAR(200), 
+	REGDATE DATETIME, 
+	REGUSER VARCHAR(50), 
+	MODDATE DATETIME, 
+	MODUSER VARCHAR(50), 
+	SYS_CODE_GROUP_DESC VARCHAR(500), 
+	SYS_CODE_GROUP_NAME VARCHAR(500), 
+	SYS_CODE_GROUP_ORD INT DEFAULT 0, 
+	DEL_YN VARCHAR(1) DEFAULT 'N'
+   )
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'BOARD_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'BOARD_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 종류 코드' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'BOARD_KIND_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 댓글 기능 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'BOARD_REPLY_FUNC_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 정렬순서' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'BOARD_ORD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 제목' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_TITLE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 조회수' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_VIEW_CNT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 내용' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_CONTENT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 답변 내용' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_REPLY_CONTENT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'공지 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE', @level2type=N'COLUMN',@level2name=N'NOTICE_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 저장 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_SAVE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 크기' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_SIZE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 확장자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_EXT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 저장 경로' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_SAVE_PATH'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 파일 웹 경로' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_WEB_PATH'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 첨부파일 정렬순서' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_FILE_ORD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'BOARD_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'대표 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_FILE', @level2type=N'COLUMN',@level2name=N'REPR_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 댓글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_REPLY_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 댓글 제목' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_REPLY_TITLE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 댓글 내용' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_REPLY_CONTENT'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'부모 게시글 댓글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'P_BOARD_ARTICLE_REPLY_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 댓글 단계' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_REPLY_DEPTH'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'BOARD_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'공지 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_REPLY', @level2type=N'COLUMN',@level2name=N'NOTICE_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 태그 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_TAG_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 태그 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_TAG_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 태그 순서' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_TAG_ORD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시글 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'BOARD_ARTICLE_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'게시판 번호' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'BOARD_NO'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_BOARD_ARTICLE_TAG', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 그룹' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'SYS_CODE_GROUP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'SYS_CODE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'SYS_CODE_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 설명' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'SYS_CODE_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 정렬순서' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'SYS_CODE_ORD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 그룹' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'SYS_CODE_GROUP'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'REGDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'등록자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'REGUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정일시' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'MODDATE'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'수정자' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'MODUSER'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 그룹 설명' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'SYS_CODE_GROUP_DESC'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 그룹 이름' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'SYS_CODE_GROUP_NAME'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'시스템 코드 그룹 정렬순서' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'SYS_CODE_GROUP_ORD'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'삭제 여부' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'TB_SYS_CODE_GROUP', @level2type=N'COLUMN',@level2name=N'DEL_YN'
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_SYS_CODE]
+AS
+SELECT 
+    A.SYS_CODE_GROUP,
+    A.SYS_CODE_GROUP_NAME,
+    A.SYS_CODE_GROUP_DESC,
+    A.SYS_CODE_GROUP_ORD,
+    B.SYS_CODE,
+    B.SYS_CODE_NAME,
+    B.SYS_CODE_DESC,
+    B.SYS_CODE_ORD
+FROM TB_SYS_CODE_GROUP A
+INNER JOIN TB_SYS_CODE B
+    ON A.SYS_CODE_GROUP = B.SYS_CODE_GROUP
+WHERE A.DEL_YN = 'N'
+AND B.DEL_YN = 'N'
+GO
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_SYS_CODE_ALL]
+AS
+  SELECT 
+    A.SYS_CODE_GROUP,
+    A.SYS_CODE_GROUP_NAME,
+    A.SYS_CODE_GROUP_DESC,
+    A.SYS_CODE_GROUP_ORD,
+    A.DEL_YN AS SYS_CODE_GROUP_DEL_YN,
+    B.SYS_CODE,
+    B.SYS_CODE_NAME,
+    B.SYS_CODE_DESC,
+    B.SYS_CODE_ORD,
+    B.DEL_YN AS SYS_CODE_DEL_YN
+FROM TB_SYS_CODE_GROUP A
+INNER JOIN TB_SYS_CODE B
+    ON A.SYS_CODE_GROUP = B.SYS_CODE_GROUP
+GO
+
+
+ALTER PROCEDURE [dbo].PRC_SAVE_BOARD(
+    @V_SAVE_METHOD VARCHAR(1), -- 'B':(기본 INSERT/UPDATE 구문),'M':(MERGE INTO 구문)
+    @V_BOARD_NO INT, -- 0:신규등록,1~:정보변경
+    @V_BOARD_NAME NVARCHAR(200),
+    @V_BOARD_KIND_CODE VARCHAR(50),
+    @V_BOARD_REPLY_FUNC_YN VARCHAR(1),
+    @V_BOARD_ORD INT,
+    @V_REGUSER VARCHAR(50),
+    @V_MODUSER VARCHAR(50)
+)
+AS
+BEGIN
+/*
+게시판 저장(등록/수정) 프로시저 구문
+
+EXEC [dbo].PRC_SAVE_BOARD 
+	'M', -- V_SAVE_METHOD
+	0, -- V_BOARD_NO
+	'일반게시판05', -- V_BOARD_NAME
+	'01', -- V_BOARD_KIND_CODE
+	'N', -- V_BOARD_REPLY_FUNC_YN
+	1, -- V_BOARD_ORD
+	'ADMIN', -- V_REGUSER
+	NULL -- V_MODUSER
+;
+
+*/
+
+BEGIN TRY
+	--- 변수 선언
+    DECLARE @V_BOARD_KIND_CODE_CHECK INT;
+    ---
+	DECLARE @ERROR_SEVERITY_NUMBER = 0;
+	DECLARE @ERROR_STATE_NUMBER = 0;
+    DECLARE @VALID_CHECK_ERROR_NUMBER INT;
+    DECLARE @VALID_CHECK_ERROR_MESSAGE VARCHAR(500);
+    DECLARE @NO_SYSTEM_CODE_ERROR_NUMBER INT;
+    DECLARE @NO_SYSTEM_CODE_ERROR_MESSAGE VARCHAR(500);
+    DECLARE @NO_SAVE_METHOD_ERROR_NUMBER INT;
+    DECLARE @NO_SAVE_METHOD_ERROR_MESSAGE VARCHAR(500);
+	--- 변수 초기화
+    V_BOARD_KIND_CODE_CHECK = 0;
+	---
+	@ERROR_SEVERITY_NUMBER = 16;
+	@ERROR_STATE_NUMBER = 1;
+    @VALID_CHECK_ERROR_NUMBER = '-20001:';
+    @VALID_CHECK_ERROR_MESSAGE = '필수값이 누락 되었습니다.';
+    @NO_SYSTEM_CODE_ERROR_NUMBER = '-20002';
+    @NO_SYSTEM_CODE_ERROR_MESSAGE = '존재하지 않는 시스템 코드 입니다.';
+    @NO_SAVE_METHOD_ERROR_NUMBER = '-20003';
+    @NO_SAVE_METHOD_ERROR_MESSAGE = '존재하지 않는 저장 방법 입니다.';
+    --- 유효성 확인
+    IF ISNULL(@V_BOARD_NAME,'') = '' BEGIN
+		RAISERROR(
+			CONCAT(@VALID_CHECK_ERROR_NUMBER,@VALID_CHECK_ERROR_MESSAGE),
+			@ERROR_SEVERITY_NUMBER,
+			@ERROR_STATE_NUMBER
+		);
+    END;
+    ---
+    SELECT @V_BOARD_KIND_CODE_CHECK = COUNT(*)
+    FROM TB_SYS_CODE A
+    WHERE A.SYS_CODE_GROUP = 'BOARD_KIND_CODE'
+    AND A.SYS_CODE = V_BOARD_KIND_CODE;
+	IF @V_BOARD_KIND_CODE_CHECK = 0 BEGIN
+		RAISERROR(
+			CONCAT(@NO_SYSTEM_CODE_ERROR_NUMBER,@NO_SYSTEM_CODE_ERROR_MESSAGE),
+			@ERROR_SEVERITY_NUMBER,
+			@ERROR_STATE_NUMBER
+		);
+    END;
+    --- 게시판 입력 처리
+    IF V_SAVE_METHOD = 'B' BEGIN
+        IF V_BOARD_NO = 0 THEN
+            INSERT INTO TB_BOARD (
+                BOARD_NAME,
+                BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN,
+                BOARD_ORD,
+                REGDATETIME,
+                REGUSER,
+                MODDATETIME,
+                MODUSER
+            )VALUES(
+                @V_BOARD_NAME,
+                @V_BOARD_KIND_CODE,
+                @V_BOARD_REPLY_FUNC_YN,
+                @V_BOARD_ORD,
+                SYSDATETIME,
+                @V_REGUSER,
+                NULL,
+                NULL
+            );
+        ELSE
+            UPDATE TB_BOARD SET
+                BOARD_NAME = V_BOARD_NAME,
+                BOARD_KIND_CODE = V_BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN = V_BOARD_REPLY_FUNC_YN,
+                BOARD_ORD = V_BOARD_ORD,
+                MODDATE = SYSDATETIME,
+                MODUSER = V_MODUSER
+            WHERE BOARD_NO = V_BOARD_NO;
+        END IF;
+    END ELSE IF V_SAVE_METHOD = 'M' BEGIN
+        MERGE INTO TB_BOARD A
+        USING DUAL
+            ON (A.BOARD_NO = V_BOARD_NO)
+        WHEN MATCHED THEN
+            UPDATE SET
+                BOARD_NAME = V_BOARD_NAME,
+                BOARD_KIND_CODE = V_BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN = V_BOARD_REPLY_FUNC_YN,
+                BOARD_ORD = V_BOARD_ORD,
+                MODDATE = SYSDATETIME,
+                MODUSER = V_MODUSER
+        WHEN NOT MATCHED THEN
+            INSERT (
+                BOARD_NO,
+                BOARD_NAME,
+                BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN,
+                BOARD_ORD,
+                REGDATETIME,
+                REGUSER,
+                MODDATETIME,
+                MODUSER
+            ) VALUES (
+                TB_BOARD_SEQ.NEXTVAL,
+                V_BOARD_NAME,
+                V_BOARD_KIND_CODE,
+                V_BOARD_REPLY_FUNC_YN,
+                V_BOARD_ORD,
+                SYSDATETIME,
+                V_REGUSER,
+                NULL,
+                NULL
+            );
+    END ELSE BEGIN
+		RAISERROR(
+			CONCAT(@NO_SAVE_METHOD_ERROR_NUMBER,@NO_SAVE_METHOD_ERROR_MESSAGE),
+			@ERROR_SEVERITY_NUMBER,
+			@ERROR_STATE_NUMBER
+		);
+    END;
+    PRINT '프로시저가 성공적으로 처리 되었습니다.';
+    COMMIT;
+END TRY
+BEGIN CATCH
+    WHEN OTHERS THEN
+        PRINT '오류 발생: ' + ERROR_MESSAGE();
+		RAISE;
+END CATCH;
+END;
+
+CREATE OR REPLACE PROCEDURE [dbo].PRC_SAVE_BOARD_ARTICLE(
+	V_SAVE_METHOD IN VARCHAR, -- 'B'(기본 INSERT/UPDATE 구문), 'M'(MERGE INTO 구문)
+	V_BOARD_ARTICLE_NO IN TB_BOARD_ARTICLE.BOARD_ARTICLE_NO%TYPE, -- 0(신규등록), 1~(정보변경)
+	V_BOARD_ARTICLE_TITLE IN TB_BOARD_ARTICLE.BOARD_ARTICLE_TITLE%TYPE,
+	V_BOARD_NO IN TB_BOARD_ARTICLE.BOARD_NO%TYPE,
+	V_BOARD_ARTICLE_CONTENT IN TB_BOARD_ARTICLE.BOARD_ARTICLE_CONTENT%TYPE,
+	V_BOARD_ARTICLE_REPLY_CONTENT IN TB_BOARD_ARTICLE.BOARD_ARTICLE_REPLY_CONTENT%TYPE,
+	V_NOTICE_YN IN TB_BOARD_ARTICLE.NOTICE_YN%TYPE,
+	V_REGUSER IN TB_BOARD_ARTICLE.REGUSER%TYPE,
+	V_MODUSER IN TB_BOARD_ARTICLE.MODUSER%TYPE
+)
+AS
+    V_BOARD_CHECK INT;
+    ---
+    VALID_CHECK_ERROR_NUMBER INT;
+    VALID_CHECK_ERROR_MESSAGE VARCHAR(500);
+    NO_BOARD_ERROR_NUMBER INT;
+    NO_BOARD_ERROR_MESSAGE VARCHAR(500);
+    NO_SAVE_METHOD_ERROR_NUMBER INT;
+    NO_SAVE_METHOD_ERROR_MESSAGE VARCHAR(500);
+BEGIN
+/*
+게시글 저장(등록/수정) 프로시저 구문
+
+CALL PRC_SAVE_BOARD_ARTICLE(
+	'M', -- V_SAVE_METHOD
+	0, -- V_BOARD_ARTICLE_NO
+	'게시글04', -- V_BOARD_ARTICLE_TITLE
+	1, -- V_BOARD_NO
+	'게시글 내용 04', -- V_BOARD_ARTICLE_CONTENT
+	'게시글 답변 내용 04', -- V_BOARD_ARTICLE_REPLY_CONTENT
+	'N', -- V_NOTICE_YN
+	'ADMIN', -- V_REGUSER
+	NULL -- V_MODUSER
+);
+
+*/
+    --- 변수 초기화
+	V_BOARD_CHECK := 0;
+	---
+    VALID_CHECK_ERROR_NUMBER := -20001;
+    VALID_CHECK_ERROR_MESSAGE := '필수값이 누락 되었습니다.';
+    NO_BOARD_ERROR_NUMBER := -20002;
+    NO_BOARD_ERROR_MESSAGE := '존재하지 않는 게시판 입니다.';
+    NO_SAVE_METHOD_ERROR_NUMBER := -20003;
+    NO_SAVE_METHOD_ERROR_MESSAGE := '존재하지 않는 저장 방법 입니다.';
+    --- 유효성 확인
+	IF V_BOARD_ARTICLE_TITLE IS NULL THEN
+        RAISE_APPLICATION_ERROR(VALID_CHECK_ERROR_NUMBER,VALID_CHECK_ERROR_MESSAGE);
+    END IF;
+    ---
+	SELECT COUNT(*) INTO V_BOARD_CHECK
+	FROM TB_BOARD A
+	WHERE A.BOARD_NO = V_BOARD_NO;
+	IF V_BOARD_CHECK = 0 THEN
+        RAISE_APPLICATION_ERROR(NO_BOARD_ERROR_NUMBER,NO_BOARD_ERROR_MESSAGE);
+    END IF;
+    --- 게시판 입력 처리
+    IF V_SAVE_METHOD = 'B' THEN
+		IF V_BOARD_ARTICLE_NO = 0 THEN
+			INSERT INTO TB_BOARD_ARTICLE (
+				BOARD_ARTICLE_NO,
+				BOARD_ARTICLE_TITLE,
+				BOARD_NO,
+				BOARD_ARTICLE_VIEW_CNT,
+				BOARD_ARTICLE_CONTENT,
+				BOARD_ARTICLE_REPLY_CONTENT,
+				REGDATETIME,
+				REGUSER,
+				MODDATETIME,
+				MODUSER
+			)VALUES(
+				TB_BOARD_ARTICLE_SEQ.NEXTVAL,
+				V_BOARD_ARTICLE_TITLE,
+				V_BOARD_NO,
+				0,
+				V_BOARD_ARTICLE_CONTENT,
+				V_BOARD_ARTICLE_REPLY_CONTENT,
+				SYSDATETIME,
+				V_REGUSER,
+				NULL,
+				NULL
+			);
+		ELSE
+			UPDATE TB_BOARD_ARTICLE SET
+				BOARD_ARTICLE_TITLE = V_BOARD_ARTICLE_TITLE,
+				BOARD_NO = V_BOARD_NO,
+				BOARD_ARTICLE_CONTENT = V_BOARD_ARTICLE_CONTENT,
+				BOARD_ARTICLE_REPLY_CONTENT = V_BOARD_ARTICLE_REPLY_CONTENT,
+				NOTICE_YN = V_NOTICE_YN,
+				MODDATE = SYSDATETIME,
+				MODUSER = V_MODUSER
+			WHERE BOARD_ARTICLE_NO = V_BOARD_ARTICLE_NO;
+		END IF;
+    ELSIF V_SAVE_METHOD = 'M' THEN
+		MERGE INTO TB_BOARD_ARTICLE A
+		USING DUAL
+			ON (A.BOARD_ARTICLE_NO = V_BOARD_ARTICLE_NO)
+		WHEN MATCHED THEN
+			UPDATE SET
+				BOARD_ARTICLE_TITLE = V_BOARD_ARTICLE_TITLE,
+				BOARD_NO = V_BOARD_NO,
+				BOARD_ARTICLE_CONTENT = V_BOARD_ARTICLE_CONTENT,
+				BOARD_ARTICLE_REPLY_CONTENT = V_BOARD_ARTICLE_REPLY_CONTENT,
+				NOTICE_YN = V_NOTICE_YN,
+				MODDATE = SYSDATETIME,
+				MODUSER = V_MODUSER
+		WHEN NOT MATCHED THEN
+			INSERT (
+				BOARD_ARTICLE_NO,
+				BOARD_ARTICLE_TITLE,
+				BOARD_NO,
+				BOARD_ARTICLE_VIEW_CNT,
+				BOARD_ARTICLE_CONTENT,
+				BOARD_ARTICLE_REPLY_CONTENT,
+				REGDATETIME,
+				REGUSER,
+				MODDATETIME,
+				MODUSER
+			)VALUES(
+				TB_BOARD_ARTICLE_SEQ.NEXTVAL,
+				V_BOARD_ARTICLE_TITLE,
+				V_BOARD_NO,
+				0,
+				V_BOARD_ARTICLE_CONTENT,
+				V_BOARD_ARTICLE_REPLY_CONTENT,
+				SYSDATETIME,
+				V_REGUSER,
+				NULL,
+				NULL
+			);
+    ELSE
+        RAISE_APPLICATION_ERROR(NO_SAVE_METHOD_ERROR_NUMBER,NO_SAVE_METHOD_ERROR_MESSAGE);
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('프로시저가 성공적으로 처리 되었습니다.');
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('오류 발생: ' || SQLERRM);
+		RAISE;
+END;
