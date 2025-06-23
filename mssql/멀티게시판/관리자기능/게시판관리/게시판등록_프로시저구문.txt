@@ -1,0 +1,137 @@
+
+CREATE OR REPLACE PROCEDURE PRC_SAVE_BOARD(
+    V_SAVE_METHOD IN VARCHAR2, -- 'B':(기본 INSERT/UPDATE 구문),'M':(MERGE INTO 구문)
+    V_BOARD_NO IN NUMBER, -- 0:신규등록,1~:정보변경
+    V_BOARD_NAME IN VARCHAR2,
+    V_BOARD_KIND_CODE IN VARCHAR2,
+    V_BOARD_REPLY_FUNC_YN IN VARCHAR2,
+    V_BOARD_ORD IN NUMBER,
+    V_REGUSER IN VARCHAR2,
+    V_MODUSER IN VARCHAR2
+)
+AS
+    V_BOARD_KIND_CODE_CHECK NUMBER(10,0);
+    ---
+    VALID_CHECK_ERROR_NUMBER NUMBER(10,0);
+    VALID_CHECK_ERROR_MESSAGE VARCHAR2(500);
+    NO_SYSTEM_CODE_ERROR_NUMBER NUMBER(10,0);
+    NO_SYSTEM_CODE_ERROR_MESSAGE VARCHAR2(500);
+    NO_SAVE_METHOD_ERROR_NUMBER NUMBER(10,0);
+    NO_SAVE_METHOD_ERROR_MESSAGE VARCHAR2(500);
+BEGIN
+/*
+게시판 저장(등록/수정) 프로시저 구문
+
+CALL PRC_SAVE_BOARD(
+	'M', -- V_SAVE_METHOD
+	0, -- V_BOARD_NO
+	'일반게시판05', -- V_BOARD_NAME
+	'01', -- V_BOARD_KIND_CODE
+	'N', -- V_BOARD_REPLY_FUNC_YN
+	1, -- V_BOARD_ORD
+	'ADMIN', -- V_REGUSER
+	NULL -- V_MODUSER
+);
+
+*/
+    --- 변수 초기화
+    V_BOARD_KIND_CODE_CHECK := 0;
+	---
+    VALID_CHECK_ERROR_NUMBER := -20001;
+    VALID_CHECK_ERROR_MESSAGE := '필수값이 누락 되었습니다.';
+    NO_SYSTEM_CODE_ERROR_NUMBER := -20002;
+    NO_SYSTEM_CODE_ERROR_MESSAGE := '존재하지 않는 시스템 코드 입니다.';
+    NO_SAVE_METHOD_ERROR_NUMBER := -20003;
+    NO_SAVE_METHOD_ERROR_MESSAGE := '존재하지 않는 저장 방법 입니다.';
+    --- 유효성 확인
+    IF V_BOARD_NAME IS NULL THEN
+        RAISE_APPLICATION_ERROR(VALID_CHECK_ERROR_NUMBER,VALID_CHECK_ERROR_MESSAGE);
+    END IF;
+    ---
+    SELECT COUNT(*) INTO V_BOARD_KIND_CODE_CHECK
+    FROM TB_SYS_CODE A
+    WHERE A.SYS_CODE_GROUP = 'BOARD_KIND_CODE'
+    AND A.SYS_CODE = V_BOARD_KIND_CODE;
+    IF V_BOARD_KIND_CODE_CHECK = 0 THEN
+        RAISE_APPLICATION_ERROR(NO_SYSTEM_CODE_ERROR_NUMBER,NO_SYSTEM_CODE_ERROR_MESSAGE);
+    END IF;
+    --- 게시판 입력 처리
+    IF V_SAVE_METHOD = 'B' THEN
+        IF V_BOARD_NO = 0 THEN
+            INSERT INTO TB_BOARD (
+                BOARD_NO,
+                BOARD_NAME,
+                BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN,
+                BOARD_ORD,
+                REGDATE,
+                REGUSER,
+                MODDATE,
+                MODUSER
+            )VALUES(
+                TB_BOARD_SEQ.NEXTVAL,
+                V_BOARD_NAME,
+                V_BOARD_KIND_CODE,
+                V_BOARD_REPLY_FUNC_YN,
+                V_BOARD_ORD,
+                SYSDATE,
+                V_REGUSER,
+                NULL,
+                NULL
+            );
+        ELSE
+            UPDATE TB_BOARD SET
+                BOARD_NAME = V_BOARD_NAME,
+                BOARD_KIND_CODE = V_BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN = V_BOARD_REPLY_FUNC_YN,
+                BOARD_ORD = V_BOARD_ORD,
+                MODDATE = SYSDATE,
+                MODUSER = V_MODUSER
+            WHERE BOARD_NO = V_BOARD_NO;
+        END IF;
+    ELSIF V_SAVE_METHOD = 'M' THEN
+        MERGE INTO TB_BOARD A
+        USING DUAL
+            ON (A.BOARD_NO = V_BOARD_NO)
+        WHEN MATCHED THEN
+            UPDATE SET
+                BOARD_NAME = V_BOARD_NAME,
+                BOARD_KIND_CODE = V_BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN = V_BOARD_REPLY_FUNC_YN,
+                BOARD_ORD = V_BOARD_ORD,
+                MODDATE = SYSDATE,
+                MODUSER = V_MODUSER
+        WHEN NOT MATCHED THEN
+            INSERT (
+                BOARD_NO,
+                BOARD_NAME,
+                BOARD_KIND_CODE,
+                BOARD_REPLY_FUNC_YN,
+                BOARD_ORD,
+                REGDATE,
+                REGUSER,
+                MODDATE,
+                MODUSER
+            ) VALUES (
+                TB_BOARD_SEQ.NEXTVAL,
+                V_BOARD_NAME,
+                V_BOARD_KIND_CODE,
+                V_BOARD_REPLY_FUNC_YN,
+                V_BOARD_ORD,
+                SYSDATE,
+                V_REGUSER,
+                NULL,
+                NULL
+            );
+    ELSE
+        RAISE_APPLICATION_ERROR(NO_SAVE_METHOD_ERROR_NUMBER,NO_SAVE_METHOD_ERROR_MESSAGE);
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('프로시저가 성공적으로 처리 되었습니다.');
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('오류 발생: ' || SQLERRM);
+		RAISE;
+END;
+COMMIT;
+

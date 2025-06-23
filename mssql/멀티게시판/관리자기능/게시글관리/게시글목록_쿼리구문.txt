@@ -1,0 +1,103 @@
+
+===================================
+* 게시글 목록 항목
+- 게시글 번호: BOARD_ARTICLE_NO
+- 게시글 제목: BOARD_ARTICLE_TITLE
+- 게시판 번호: BOARD_NO
+- 게시판 이름: TB_BOARD.BOARD_NAME
+- 게시글 조회수: BOARD_ARTICLE_VIEW_CNT
+- 등록일시: REGDATE
+- 등록자: REGUSER
+- 수정일시: MODDATE
+- 수정자: MODUSER
+---
+- 게시판 종류 코드: TB_BOARD.BOARD_KIND_CODE
+- 게시판 종류 코드 이름: VW_SYS_CODE_ALL.SYS_CODE_NAME
+- 게시글 첨부파일 수
+- 게시글 대표 첨부파일 이름
+
+===================================
+* 게시글 목록 조회 쿼리
+
+SELECT
+    A.*,
+    FNC_GET_ALL_CODE_NAME('BOARD_KIND_CODE',A.BOARD_KIND_CODE)
+        AS BOARD_KIND_CODE_NAME2,
+    (
+        SELECT
+            SYS_CODE_NAME
+        FROM VW_SYS_CODE_ALL
+        WHERE SYS_CODE_GROUP = 'BOARD_KIND_CODE'
+        AND SYS_CODE = A.BOARD_KIND_CODE
+    ) AS BOARD_KIND_CODE_NAME, /* 게시판 종류 코드 이름 */
+    (
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_ARTICLE_REPLY
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'N'
+    ) AS BOARD_ARTICLE_REPLY_CNT, /* 게시글 댓글 수 */
+    (
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_ARTICLE_REPLY
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'N'
+        AND NOTICE_YN = 'Y'
+    ) AS BOARD_ARTICLE_REPLY_CNT, /* 게시글 공지 댓글 수 */
+    (
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_ARTICLE_REPLY
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'Y'
+    ) AS BOARD_ARTICLE_REPLY_DELETE_CNT, /* 게시글 삭제 댓글 수 */
+    (
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_ARTICLE_FILE
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'N'
+    ) AS BOARD_ARTICLE_FILE_CNT, /* 게시글 첨부파일 수 */
+    (
+        SELECT
+            BOARD_ARTICLE_FILE_NAME
+        FROM TB_BOARD_ARTICLE_FILE
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'N'
+        AND REPR_YN = 'Y'
+    ) AS BOARD_ARTICLE_REPR_FILE_NAME, /* 게시글 대표 첨부파일 이름 */
+    (
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_ARTICLE_FILE
+        WHERE BOARD_NO = A.BOARD_NO
+        AND BOARD_ARTICLE_NO = A.BOARD_ARTICLE_NO
+        AND DEL_YN = 'Y'
+    ) AS BOARD_ARTICLE_DELETE_FILE_CNT /* 게시글 삭제 첨부파일 수 */
+FROM (
+    SELECT
+        A.BOARD_ARTICLE_NO, /* 게시글 번호 */
+        A.REGDATE, /* 등록일시 */
+        A.REGUSER, /* 등록자 */
+        A.MODDATE, /* 수정일시 */
+        A.MODUSER, /* 수정자 */
+        A.BOARD_ARTICLE_TITLE, /* 게시글 제목 */
+        A.BOARD_NO, /* 게시판 번호 */
+        A.BOARD_ARTICLE_VIEW_CNT, /* 게시판 조회수 */
+        B.BOARD_NAME, /* 게시판 이름 */
+        B.BOARD_KIND_CODE /* 게시판 종류 코드 */
+    FROM TB_BOARD_ARTICLE A
+    INNER JOIN TB_BOARD B
+        ON A.BOARD_NO = B.BOARD_NO
+    WHERE A.DEL_YN = 'N'
+    AND B.DEL_YN = 'N'
+) A
+ORDER BY A.REGDATE DESC
+;
+
